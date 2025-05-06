@@ -15,8 +15,6 @@ const submit = () => {
     //inertia's useForm automatically handles passing the data to the post route
     form.post(route("login"), {
         onError: () => form.reset('password'), //reset the password fields on error, can configure for others too
-        
-        onSuccess: () => router.visit('/')
     });
 };
 

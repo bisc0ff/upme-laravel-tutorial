@@ -36,19 +36,17 @@ class HandleInertiaRequests extends Middleware
 
      //share common data between all pages
      // some use cases: have authenticated user data
-    public function share(Request $request): array
-    {
-        return [
-            ...parent::share($request),
-            //
-
-            //when we have authentication, we can use this
-            //this is a sample of lazy loading as it will only be called when the user is authenticated or 
-            // it will only run when it's needed or when it's time to serialize the data and send it to the frontend
-
-            'auth.user' => fn () => $request->user()    //if user exists
-            ? $request->user()->only('id', 'name')      // then get id and name
-            : 'Mike',                                   // else return Mike
-        ];
-    }
+     public function share(Request $request): array
+     {
+         return array_merge(parent::share($request), [
+             'auth.user' => fn () => $request->user()
+                 ? $request->user()->only('id', 'name', 'avatar')
+                 : null,
+     
+             'flash' => [
+                 'greet' => fn () => $request->session()->get('greet'),
+             ],
+         ]);
+     }
+     
 }

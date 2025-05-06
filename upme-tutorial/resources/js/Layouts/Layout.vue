@@ -5,32 +5,46 @@
 <template>
     <Head>
         <title>My app</title>
-
-       <!-- use head-key if we want to set the meta tag for each page separately -->
         <meta   
             head-key="description" 
             name="description" 
             content="my app description"
         />
     </Head>
+
     <div>
         <header class="text-white">
-            <nav class="flex items-center justify-between p-f max-w-screen-lg mx-auto">
+            <nav class="flex items-center justify-between px-4 py-2 max-w-screen-lg mx-auto">
                 <div class="space-x-6">
-                    <!-- the Link tag ensures we don't reload the page completely 
-                     and so that it doesn't call the server when switching pages
-                     
-                     Also look into Single Page application (SPA)-->
-                    <Link :href="route('home')">Home</Link>
-                    <Link :href="route('about')">About</Link>
-                    <Link :href="route('register')">Register</Link>
-                    <Link :href="route('login')">Login</Link>
+                    <Link :href="route('home')" 
+                        class="nav-link" :class="{'bg-slate-700' : $page.component === 'Home'}">Home
+                    </Link>
+
+                    <Link :href="route('about')" class="nav-link" :class="{'bg-slate-700' : $page.component === 'About'}">About</Link>
                 </div>
+
+                <div v-if="$page.props.auth.user" class="space-x-6 mb-1 flex">
+                    <img class="avatar" 
+                         :src="$page.props.auth.user.avatar? ( 'storage/' + $page.props.auth.user.avatar ) : ('storage/avatars/default.jpg')"
+                         alt="">
+
+                    <Link :href="route('dashboard')" class="nav-link" :class="{'bg-slate-700' : $page.component === 'Dashboard'}">Dashboard</Link>
+                    <Link 
+                        :href="route('logout')" 
+                        method="post" 
+                        as="button" 
+                        class="nav-link">Logout
+                    </Link>
+                </div>
+
+                <div v-else class="space-x-6 mb-1">
+                    <Link :href="route('register')" class="nav-link" :class="{'bg-slate-700' : $page.component === 'Auth/Register'}">Register</Link>
+                   <Link :href="route('login')" class="nav-link" :class="{'bg-slate-700' : $page.component === 'Auth/Login'}">Login</Link>
+                </div> 
             </nav>
         </header>
-        <main class="p-4">
 
-            <!-- this is there the component will be rendered when using this layout -->
+        <main class="p-4">
             <slot />
         </main>
     </div>

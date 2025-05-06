@@ -19,6 +19,6 @@
         </Head>
 
     <div>
-        About Page Hello user: {{ user }}
+        About Page
     </div>
 </template>
