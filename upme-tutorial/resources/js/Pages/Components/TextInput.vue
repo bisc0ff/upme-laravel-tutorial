@@ -17,6 +17,10 @@ defineProps({
     },
     message: {
         type: String
+    },
+    disabled: {
+        type: Boolean,
+        default: false
     }
 
 })
@@ -24,9 +28,9 @@ defineProps({
 
 <template>
 
-    <div class="mb-6">
+    <div class="mb-6 flex-1">
         <label for="name">{{ name }}</label>
-        <input :type="type" v-model="model" :class="{'!ring-red-500' :message}" />
+        <input :type="type" v-model="model" :disabled="disabled" :class="{'!ring-red-500' :message}" />
         <small class="error" v-if="message">{{ message }}</small>
     </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -15,11 +16,31 @@ class AuthController extends Controller
 
         // validate the field
         $fields = $request->validate([
-            'avatar'    => ['file', 'nullable', 'max:300'],
-            'name'      =>['required', 'string', 'max:255'],
-            'email'     =>['required', 'email', 'max:255', 'unique:users'],
-            'password'  =>['required', 'confirmed']        
+            'avatar'             => ['nullable', 'file', 'max:300'],
+            'first_name'         => ['required', 'string', 'max:255'],
+            'middle_name'        => ['required', 'string', 'max:255'],
+            'last_name'          => ['required', 'string', 'max:255'],
+        
+            // Philippine mobile number regex: starts with 09 or +639, followed by 9 digits
+            // 'cellphone_num' => ['required', 'regex:/^(09|\+639)\d{8}$/'],
+            'cellphone_num' => ['required', 'string', 'max:255'],
+        
+            'email'              => ['required', 'email', 'max:255', 'unique:users,email'],
+            'address'            => ['required', 'string', 'max:255'],
+        
+            // Assuming dropdowns use string values matching ENUMs in the DB
+            'department'         => ['required', 'string', 'in:Product and Technology,Sales,Marketing,HR/Admin,Finance'], // customize the list
+            'position'           => ['required', 'string', 'max:255'],
+            'status'             => ['required', 'string', 'in:Active,Inactive,Terminiated,Deleted,On-leave'], // customize the list
+
+            'is_admin'           => ['required', 'boolean'],
+            'password'           => ['required', 'string', 'confirmed'],
         ]);
+
+        // Uppercase first character of each name
+        $fields['first_name']  = Str::title(trim($fields['first_name']));
+        $fields['middle_name'] = Str::title(trim($fields['middle_name']));
+        $fields['last_name']   = Str::title(trim($fields['last_name']));
 
         if($request->hasFile('avatar')) {
             $fields['avatar'] =  Storage::disk('public')->put('avatars', $request->avatar);

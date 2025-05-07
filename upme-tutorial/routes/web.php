@@ -8,14 +8,20 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 // Landing page route
-Route::get('/', function(Request $request) {
-    return Inertia('Home', [
-                            // for search functionality
-        'users' => User::when($request->search, function($query) use ($request) {
+
+
+Route::inertia('/home', 'Home')->name('home');
+
+Route::middleware('auth')->group(function(){
+
+    Route::get('dashboard', function(Request $request) {
+        return Inertia('Dashboard', [
+            // for search functionality
+            'users' => User::when($request->search, function($query) use ($request) {
             //filters data based on the search input
             $query
-            ->where('name', 'like', '%' . $request->search . '%')
-            ->orWhere('email', 'like', '%' . $request->search . '%');
+             ->where('name', 'like', '%' . $request->search . '%')
+             ->orWhere('email', 'like', '%' . $request->search . '%');
         })->paginate(5)->withQueryString(),
 
         'searchTerm' => $request->search,
@@ -27,25 +33,32 @@ Route::get('/', function(Request $request) {
                     Auth::user()->can('delete', User::class) : 
                     null,
         ]
-    ]);
-})->name('home');
-
-Route::middleware('auth')->group(function(){
-    Route ::inertia('/dashboard', 'Dashboard')->name('dashboard');
+        ]);
+    })->name('dashboard');
 
     Route ::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+    Route::get('/user/{user:id}', function (User $user) {
+        return Inertia::render('UserInfo', [ // re-use the register page to display user info
+            'user' => $user,
+            'can' => [
+                'update' => Auth::user()?->can('update', $user),
+                'delete' => Auth::user()?->can('delete', $user),
+            ],
+        ]);
+    })->name('user.profile');
+
+    // Register page using Inertia route helper
+    Route::inertia('/register', 'Auth/Register')->name('register');
+    Route ::post('/register', [AuthController::class, 'register']);
 });
 
 Route ::inertia('/about', 'About')->name('about');
 
-Route::middleware('guest')->group(function(){
-    // Register page using Inertia route helper
-    Route::inertia('/register', 'Auth/Register')->name('register');
-    Route ::post('/register', [AuthController::class, 'register']);
-    
-    
+Route::middleware('guest')->group(function(){    
     // login routes
-    Route::inertia('/login', 'Auth/Login')->name('login');
-    Route ::post('/login', [AuthController::class, 'login']);
+    Route::inertia('/', 'Auth/Login')->name('login');
+    Route ::post('/', [AuthController::class, 'login']);
 });
     
