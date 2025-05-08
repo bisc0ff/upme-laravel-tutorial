@@ -16,7 +16,7 @@ class AuthController extends Controller
 
         // validate the field
         $fields = $request->validate([
-            'avatar'             => ['nullable', 'file', 'max:300'],
+            'avatar'             => ['nullable', 'file', 'max:2048'],
             'first_name'         => ['required', 'string', 'max:255'],
             'middle_name'        => ['required', 'string', 'max:255'],
             'last_name'          => ['required', 'string', 'max:255'],
@@ -28,10 +28,10 @@ class AuthController extends Controller
             'email'              => ['required', 'email', 'max:255', 'unique:users,email'],
             'address'            => ['required', 'string', 'max:255'],
         
-            // Assuming dropdowns use string values matching ENUMs in the DB
-            'department'         => ['required', 'string', 'in:Product and Technology,Sales,Marketing,HR/Admin,Finance'], // customize the list
+            // dropdowns use string values matching ENUMs in the DB
+            'department'         => ['required', 'string', 'in:Product and Technology,Sales,Marketing,HR/Admin,Finance'],
             'position'           => ['required', 'string', 'max:255'],
-            'status'             => ['required', 'string', 'in:Active,Inactive,Terminiated,Deleted,On-leave'], // customize the list
+            'status'             => ['required', 'string', 'in:Active,Inactive,Terminiated,Deleted,On-leave'], 
 
             'is_admin'           => ['required', 'boolean'],
             'password'           => ['required', 'string', 'confirmed'],
@@ -48,9 +48,6 @@ class AuthController extends Controller
 
         //register 
         $user = User::create($fields);
-
-        //login 
-        Auth::login($user);
 
         //redirect
         return redirect()->route('dashboard');

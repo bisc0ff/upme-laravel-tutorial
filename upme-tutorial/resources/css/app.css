@@ -59,9 +59,9 @@
         @apply hover:bg-slate-100 w-full p-0;
     }
     th {
-        @apply px-6 py-4;
+        @apply text-nowrap px-6 py-4;
     }
-    td {
+    td{
         @apply px-6 py-4 border-b border-slate-100;
     }
     .avatar {

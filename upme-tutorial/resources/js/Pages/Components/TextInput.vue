@@ -1,37 +1,41 @@
 <script setup>
-
-const model = defineModel({
-    type: null,
-    required: true
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+    maxLength: 255,
+  },
+  type: {
+    type: String,
+    default: 'text',
+  },
+  message: {
+    type: String,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  modelValue: {
+    type: [String, Number],
+    default: '',
+  },
 });
 
-defineProps({
-    name: {
-        type: String, 
-        required: true,
-        maxLength: 255
-    },
-    type:{
-        type: String,
-        default: 'text'
-    },
-    message: {
-        type: String
-    },
-    disabled: {
-        type: Boolean,
-        default: false
-    }
-
-})
+// Emit the update to the parent when the input changes
+const emit = defineEmits(['update:modelValue']);
 </script>
 
 <template>
-
-    <div class="mb-6 flex-1">
-        <label for="name">{{ name }}</label>
-        <input :type="type" v-model="model" :disabled="disabled" :class="{'!ring-red-500' :message}" />
-        <small class="error" v-if="message">{{ message }}</small>
-    </div>
-
+  <div class="mb-6 flex-1">
+    <label :for="name">{{ name }}</label>
+    <input
+      :name="name"
+      :type="type"
+      :value="modelValue"
+      :disabled="disabled"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
+    <small v-if="message" class="text-red-500 text-xs">{{ message }}</small>
+  </div>
 </template>

@@ -48,10 +48,6 @@ const submit = () => {
                 <input type="checkbox" v-model="form.remember" id="remember" />
                 <label for="remember">Remember Me?</label>
             </div>
-            
-            <p class="text-slate-600">Need an account? 
-                <a :href="route('register')"class="text-link">Register here!</a>
-            </p>
         </div>
 
         <div>

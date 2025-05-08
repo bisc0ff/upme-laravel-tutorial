@@ -34,11 +34,12 @@ defineProps({
         v-model="model"
         class="bg-gray-50 border text-gray-900 text-sm rounded-lg block w-full p-2.5"
     >
-        <option value="" disabled selected>Status</option>
+        <option value="" selected>Status</option>
         <option value="Active">Active</option>
         <option value="Inactive">Inactive</option>
         <option value="Terminated">Terminated</option>
         <option value="On-leave">On-leave</option>
+        <option value="">Deleted</option>
     </select>
     <small class="error" v-if="message">{{ message }}</small>
     </div>
