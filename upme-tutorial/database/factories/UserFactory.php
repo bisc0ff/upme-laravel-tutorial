@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'email'             => fake()->unique()->safeEmail(),
             'password'          => Hash::make('password'), 
             'remember_token'    => Str::random(10),
-            'avatar'            => 'avatars/defaults.jpg', 
+            'avatar'            => 'avatars/default.jpg', 
             'date_hired'        => now(),
             'status'            => fake()->randomElement(['Active', 'Inactive', 'Terminated']),
             'position'          => fake()->jobTitle(),

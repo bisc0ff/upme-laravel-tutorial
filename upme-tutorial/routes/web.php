@@ -21,8 +21,9 @@ Route::middleware('auth')->group(function(){
         if ($authUser->is_admin) {
             $users = User::when($request->search, function ($query) use ($request) {
                 $query
-                    ->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('email', 'like', '%' . $request->search . '%');
+                    ->where('first_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('last_name', 'like', '%' . $request->search . '%');
             })->paginate(10)->withQueryString();
         } else {
             // For non-admin users, just pass their own data (no search or pagination)
@@ -66,7 +67,14 @@ Route::middleware('auth')->group(function(){
     })->name('user.profile');
     
 
-//protect update and delete routes by checking if they're an admin
+    // Register page using Inertia route helper
+    Route::inertia('/register', 'Auth/Register', [
+        'action' => 'Register',
+    ])->name('register');
+    
+    Route ::post('/register', [AuthController::class, 'register']);
+
+    //protect update and delete routes by checking if they're an admin
    Route::middleware(['can:update,App\Models\User', 'can:delete,App\Models\User'])->group(function() {
         //edit user route
         Route::get('/user/edit/{user:id}', function(User $user) {
@@ -84,16 +92,9 @@ Route::middleware('auth')->group(function(){
     
         Route::patch('/users/restore/{user}', [UserController::class, 'restore_user'])->name('users.restore');
     });
-
 });
 
 
-// Register page using Inertia route helper
-Route::inertia('/register', 'Auth/Register', [
-    'action' => 'Register',
-])->name('register');
-
-Route ::post('/register', [AuthController::class, 'register']);
 
 Route ::inertia('/about', 'About')->name('about');
 

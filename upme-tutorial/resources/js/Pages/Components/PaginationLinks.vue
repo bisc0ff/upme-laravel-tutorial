@@ -18,9 +18,8 @@ const makeLabel = (label) => {
 </script>
 
 <template>
-        <!-- :href="link.url" is not working, should be placed under <component> -->
   <div class="flex justify-between items-start">
-    <div class="flex items-center rounded-md overflow-hidden shadow-lg">
+    <div class="flex flex-wrap gap-1 items-center rounded-md shadow-lg">
       <div v-for="link in paginator.links" :key="link.url">
         <component
           :is="link.url ? 'Link' : 'span'"
