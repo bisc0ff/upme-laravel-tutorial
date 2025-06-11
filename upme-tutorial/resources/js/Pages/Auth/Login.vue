@@ -1,6 +1,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import TextInput from '../Components/TextInput.vue';
+import AuthLayout from '../../Layouts/AuthLayout.vue';
 
 //inertia has a form helper that makes it easier to handle forms
 const form = useForm({
@@ -18,7 +19,11 @@ const submit = () => {
     });
 };
 
+defineOptions({
+  layout: AuthLayout
+})
 </script>
+
 
 <template>
     <Head title="Login" />

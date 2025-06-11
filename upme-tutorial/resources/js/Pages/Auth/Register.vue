@@ -144,7 +144,6 @@ const submit = () => {
         </div>
 
         <div v-if="action !== 'View'">
-            <p class="text-slate-600 mb-2">Already a user? <a href="#" class="text-link">Login here!</a></p>
             <!-- :disabled:"form.processing" -> disables button while the form is being processed -->
             <button class="primary-btn" :disabled="form.processing">{{ action }}</button>
         </div>

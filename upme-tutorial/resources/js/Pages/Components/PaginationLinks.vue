@@ -35,8 +35,10 @@ const makeLabel = (label) => {
       </div>
     </div>
 
-    <p class="text-slate-600 text-sm">
-      Showing {{ paginator.from }} to {{ paginator.to }} of {{ paginator.total }} results
-    </p>
+    <div class="ml-4">
+      <p class="text-slate-600 text-sm">
+        Showing {{ paginator.from }} to {{ paginator.to }} of {{ paginator.total }} results
+      </p>
+    </div>
   </div>
 </template>

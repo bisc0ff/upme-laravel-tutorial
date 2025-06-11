@@ -60,18 +60,28 @@ class AuthController extends Controller
             'email'     => ['required', 'email'],
             'password'  => ['required'],
         ]);
+
+        $user = User::where('email', $request->email)->first();
+
  
-        //attempt login
-        if (Auth::attempt($fields, $request->remember)) {
-            $request->session()->regenerate();
- 
-            return redirect()->intended('dashboard')->with('greet', 'Welcome back!');
+        if ($user->status !== 'Active') {
+            return back()->withErrors([
+                'email' => 'Your account is not active.',
+            ]);
+        } else {
+            //attempt login
+            if (Auth::attempt($fields, $request->remember)) {
+                $request->session()->regenerate();
+     
+                return redirect()->intended('dashboard')->with('greet', 'Welcome back!');
+            }
+     
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ])->onlyInput('email');
         }
- 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
-    }
+        }
+
 
     public function logout(Request $request)
     {
@@ -81,6 +91,6 @@ class AuthController extends Controller
      
         $request->session()->regenerateToken();
      
-        return redirect()->route('home');
+        return redirect()->route('/');
     }
 }

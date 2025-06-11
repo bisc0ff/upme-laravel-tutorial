@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 // Landing page route
 
-
-Route::inertia('/home', 'Home')->name('home');
-
 Route::middleware('auth')->group(function(){
 
     Route::get('dashboard', function (Request $request) {
@@ -91,12 +88,12 @@ Route::middleware('auth')->group(function(){
         Route::delete('/users/permaDel/{user}', [UserController::class, 'perma_delete'])->name('users.permaDel');
     
         Route::patch('/users/restore/{user}', [UserController::class, 'restore_user'])->name('users.restore');
+
+        //could use this pala, but Inertia has problems with multipart/form-data when using PUT, PATCH, or DELETE so the workaround was to use POST only
+        // 2 solutions are fine, i prefer the individual routes so it's easier to read in the frontend
+        // Route::resource('users', UserController::class);
     });
 });
-
-
-
-Route ::inertia('/about', 'About')->name('about');
 
 Route::middleware('guest')->group(function(){    
     // login routes
